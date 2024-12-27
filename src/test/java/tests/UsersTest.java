@@ -1,5 +1,6 @@
 package tests;
 
+import config.Config;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -10,8 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static utils.Constants.CREATE_USER;
 
-public class UsersTest {
+public class UsersTest extends Config {
 
     @Test
     public void getUsersTest() {
@@ -20,17 +22,13 @@ public class UsersTest {
         map.put("limit",10);
 
         Response response = given()
-                .baseUri("https://dummyapi.io/data")
-                .basePath("/v1/")
-                .header("app-id", "675338db00236f7d1c311b6f")
                 .queryParams(map)
-                .log().all()
                 .when().get(Constants.GET_ALL_USERS);
 
         Assert.assertEquals(response.getStatusCode(),200, "Expected 200 but got: "+response.getStatusCode());
         String actualFirstName = response.jsonPath().get("data[0].firstName");
         System.out.println(actualFirstName);
-        Assert.assertEquals(actualFirstName,"Edita");
+        Assert.assertEquals(actualFirstName,"Roberto");
 
     }
 
@@ -41,35 +39,72 @@ public class UsersTest {
         map.put("limit",10);
 
         JsonPath jsonPath  = given()
-                .baseUri("https://dummyapi.io/data")
-                .basePath("/v1/")
-                .header("app-id", "675338db00236f7d1c311b6f")
                 .queryParams(map)
-                .log().all()
                 .when().get(Constants.GET_ALL_USERS).jsonPath();
 
 
         String actualFirstName = jsonPath.getString("data[0].firstName");
-        boolean result = actualFirstName.equals("Edita");
+        boolean result = actualFirstName.equals("Roberto");
         Assert.assertTrue(result,"Expected first name is not correct!");
 
     }
 
     @Test
     public void getUsersByIdTest() {
-        String userId = "60d0fe4f5311236168a109ca";
+        String userId = "60d0fe4f5311236168a109cd";
         Response response = given()
-                .baseUri("https://dummyapi.io/data")
-                .basePath("/v1/")
-                .header("app-id", "675338db00236f7d1c311b6f")
                 .pathParam("id",userId)
-                .log().all()
-                .when().get(Constants.GET_ALL_USERS_BY_ID);
+                .when().get(Constants.GET_USER_BY_ID);
 
         Assert.assertEquals(response.getStatusCode(),200, "Expected 200 but got: "+response.getStatusCode());
-        String actualFirstName = response.jsonPath().get("data[0].firstName");
+        String actualFirstName = response.jsonPath().get("firstName");
         System.out.println(actualFirstName);
-        Assert.assertEquals(actualFirstName,"Edita");
+        Assert.assertEquals(actualFirstName,"Roberto");
 
+    }
+
+    @Test
+    public void deleteUsersByIdTest() {
+        String userId = "60d0fe4f5311236168a109cc";
+        Response response = given()
+                .pathParam("id",userId)
+                .when().delete(Constants.DELETE_USER_BY_ID);
+
+        Assert.assertEquals(response.getStatusCode(),200, "Expected 200 but got: "+response.getStatusCode());
+        String id = response.jsonPath().get("id");
+        System.out.println(id);
+
+        Assert.assertEquals(id,userId);
+
+        given()
+                .pathParam("id",userId)
+                .when().delete(Constants.GET_USER_BY_ID);
+        Assert.assertEquals(response.getStatusCode(),404, "Expected 404 but got: " +response.getStatusCode());
+
+    }
+
+    @Test
+    public void createUserTest(){
+
+        Response response = given()
+                .body("{\n" +
+                        "    \"firstName\": \"Sarita\",\n" +
+                        "    \"lastName\": \"Anderson\",\n" +
+                        "    \"picture\": \"https://randomuser.me/api/portraits/women/58.jpg\",\n" +
+                        "    \"gender\": \"female\",\n" +
+                        "    \"email\": \"sarita.anderson9763@example.com\",\n" +
+                        "    \"dateOfBirth\": \"1996-04-30T19:26:49.610Z\",\n" +
+                        "    \"phone\": \"92694011\",\n" +
+                        "    \"location\": {\n" +
+                        "        \"street\": \"9614, SÃ¸ndermarksvej\",\n" +
+                        "        \"city\": \"Kongsvinger\",\n" +
+                        "        \"state\": \"Nordjylland\",\n" +
+                        "        \"country\": \"Denmark\",\n" +
+                        "        \"timezone\": \"-9:00\"\n" +
+                        "    }\n" +
+                        "}")
+                .when().post(CREATE_USER);
+
+        Assert.assertEquals(response.getStatusCode(),200);
     }
 }
