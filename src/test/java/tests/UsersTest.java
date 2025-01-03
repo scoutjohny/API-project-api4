@@ -3,8 +3,12 @@ package tests;
 import config.Config;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import model.UserRequest;
+import model.UserResponse;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import utils.Constants;
 
 import java.util.HashMap;
@@ -15,6 +19,12 @@ import static utils.Constants.CREATE_USER;
 
 public class UsersTest extends Config {
 
+    SoftAssert softAssert;
+
+    @BeforeMethod(alwaysRun = true)
+    public void setup(){
+        softAssert = new SoftAssert();
+    }
     @Test
     public void getUsersTest() {
         Map<String, Integer> map = new HashMap<>();
@@ -86,25 +96,39 @@ public class UsersTest extends Config {
     @Test
     public void createUserTest(){
 
-        Response response = given()
-                .body("{\n" +
-                        "    \"firstName\": \"Sarita\",\n" +
-                        "    \"lastName\": \"Anderson\",\n" +
-                        "    \"picture\": \"https://randomuser.me/api/portraits/women/58.jpg\",\n" +
-                        "    \"gender\": \"female\",\n" +
-                        "    \"email\": \"sarita.anderson9763@example.com\",\n" +
-                        "    \"dateOfBirth\": \"1996-04-30T19:26:49.610Z\",\n" +
-                        "    \"phone\": \"92694011\",\n" +
-                        "    \"location\": {\n" +
-                        "        \"street\": \"9614, SÃ¸ndermarksvej\",\n" +
-                        "        \"city\": \"Kongsvinger\",\n" +
-                        "        \"state\": \"Nordjylland\",\n" +
-                        "        \"country\": \"Denmark\",\n" +
-                        "        \"timezone\": \"-9:00\"\n" +
-                        "    }\n" +
-                        "}")
-                .when().post(CREATE_USER);
+//        Response response = given()
+//                .body("{\n" +
+//                        "    \"firstName\": \"Sarita\",\n" +
+//                        "    \"lastName\": \"Anderson\",\n" +
+//                        "    \"picture\": \"https://randomuser.me/api/portraits/women/58.jpg\",\n" +
+//                        "    \"gender\": \"female\",\n" +
+//                        "    \"email\": \"sarita.anderson9763@example.com\",\n" +
+//                        "    \"dateOfBirth\": \"1996-04-30T19:26:49.610Z\",\n" +
+//                        "    \"phone\": \"92694011\",\n" +
+//                        "    \"location\": {\n" +
+//                        "        \"street\": \"9614, SÃ¸ndermarksvej\",\n" +
+//                        "        \"city\": \"Kongsvinger\",\n" +
+//                        "        \"state\": \"Nordjylland\",\n" +
+//                        "        \"country\": \"Denmark\",\n" +
+//                        "        \"timezone\": \"-9:00\"\n" +
+//                        "    }\n" +
+//                        "}")
+//                .when().post(CREATE_USER);
+//
+//        Assert.assertEquals(response.getStatusCode(),200);
 
-        Assert.assertEquals(response.getStatusCode(),200);
+        UserRequest user = UserRequest.createUser();
+
+        UserResponse userResponse = given()
+                .body(user)
+                .when().post(CREATE_USER)
+                .getBody().as(UserResponse.class);
+
+        String userId = userResponse.getId();
+
+        softAssert.assertEquals(userResponse.getFirstName(),user.getFirstName());
+        softAssert.assertEquals(userResponse.getLastName(),user.getLastName());
+        softAssert.assertEquals(userResponse.getPicture(),user.getPicture());
+        softAssert.assertAll();
     }
 }

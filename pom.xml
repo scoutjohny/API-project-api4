@@ -14,6 +14,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <testNg-version>7.10.2</testNg-version>
         <restAssured-version>5.4.0</restAssured-version>
+        <lombok-version>1.18.34</lombok-version>
+        <jackson-databind-version>2.17.2</jackson-databind-version>
+        <javafaker-version>1.0.2</javafaker-version>
     </properties>
 
     <dependencies>
@@ -31,6 +34,28 @@
             <artifactId>rest-assured</artifactId>
             <version>${restAssured-version}</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok-version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind-version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.github.javafaker/javafaker -->
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>${javafaker-version}</version>
+        </dependency>
+
 
     </dependencies>
 
