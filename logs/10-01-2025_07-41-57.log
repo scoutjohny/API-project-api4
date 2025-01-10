@@ -1,0 +1,6 @@
+2025-01-10 19:41:57.493 [main] INFO  listeners.TestListener - STARTING TEST METHOD: createUserTest
+2025-01-10 19:42:00.705 [main] INFO  listeners.TestListener - STARTING TEST METHOD: createUserUsingJavaObjectTest
+2025-01-10 19:42:01.924 [main] INFO  listeners.TestListener - STARTING TEST METHOD: deleteUsersByIdTest
+2025-01-10 19:42:02.235 [main] INFO  listeners.TestListener - STARTING TEST METHOD: getUsersByIdTest
+2025-01-10 19:42:03.261 [main] INFO  listeners.TestListener - STARTING TEST METHOD: getUsersTest
+2025-01-10 19:42:03.692 [main] INFO  listeners.TestListener - STARTING TEST METHOD: getUsersUsingJsonPathTest

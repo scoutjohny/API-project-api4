@@ -3,10 +3,13 @@ package tests;
 import config.Config;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import model.UserRequest;
-import model.UserResponse;
+import listeners.TestListener;
+import models.userModel.UserRequest;
+import models.userModel.UserResponse;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import utils.Constants;
@@ -16,6 +19,8 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static utils.Constants.CREATE_USER;
+import static utils.Utils.createJsonFile;
+@Listeners (TestListener.class)
 
 public class UsersTest extends Config {
 
@@ -118,6 +123,25 @@ public class UsersTest extends Config {
 //        Assert.assertEquals(response.getStatusCode(),200);
 
         UserRequest user = UserRequest.createUser();
+
+        UserResponse userResponse = given()
+                .body(user)
+                .when().post(CREATE_USER)
+                .getBody().as(UserResponse.class);
+
+        String userId = userResponse.getId();
+
+        softAssert.assertEquals(userResponse.getFirstName(),user.getFirstName());
+        softAssert.assertEquals(userResponse.getLastName(),user.getLastName());
+        softAssert.assertEquals(userResponse.getPicture(),user.getPicture());
+        softAssert.assertAll();
+    }
+
+    @Test
+    public void createUserUsingJavaObjectTest(){
+        UserRequest user = UserRequest.createUser();
+
+        createJsonFile("userRequest",user);
 
         UserResponse userResponse = given()
                 .body(user)
