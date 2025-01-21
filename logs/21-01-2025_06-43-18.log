@@ -1,0 +1,2 @@
+2025-01-21 18:43:18.397 [main] INFO  listeners.TestListener - STARTING TEST METHOD: createUserUsingJavaObjectTest
+2025-01-21 18:43:23.223 [main] INFO  listeners.TestListener - TEST METHOD: createUserUsingJavaObjectTestPASSED

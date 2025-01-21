@@ -3,21 +3,23 @@ package tests;
 import config.Config;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import listeners.RetryAnalizer;
 import listeners.TestListener;
 import models.userModel.UserRequest;
 import models.userModel.UserResponse;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
+import services.user.UserService;
 import utils.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static services.user.UserService.createUserTemplate;
 import static utils.Constants.CREATE_USER;
 import static utils.Utils.createJsonFile;
 @Listeners (TestListener.class)
@@ -30,7 +32,7 @@ public class UsersTest extends Config {
     public void setup(){
         softAssert = new SoftAssert();
     }
-    @Test
+    @Test(description = "Get all users form Data Base; Expected result> All users are retrieved", retryAnalyzer = RetryAnalizer.class)
     public void getUsersTest() {
         Map<String, Integer> map = new HashMap<>();
         map.put("page",0);
@@ -56,7 +58,6 @@ public class UsersTest extends Config {
         JsonPath jsonPath  = given()
                 .queryParams(map)
                 .when().get(Constants.GET_ALL_USERS).jsonPath();
-
 
         String actualFirstName = jsonPath.getString("data[0].firstName");
         boolean result = actualFirstName.equals("Roberto");
@@ -139,20 +140,23 @@ public class UsersTest extends Config {
 
     @Test
     public void createUserUsingJavaObjectTest(){
-        UserRequest user = UserRequest.createUser();
+//        UserRequest user = UserRequest.createUser();
+        UserRequest userTemplate = createUserTemplate();
+//        createJsonFile("userRequest",user);
+        UserService userService = new UserService();
+//
+//        UserResponse userResponse = given()
+//                .body(user)
+//                .when().post(CREATE_USER)
+//                .getBody().as(UserResponse.class);
+//
+//        String userId = userResponse.getId();
 
-        createJsonFile("userRequest",user);
+        UserResponse userResponse = userService.createUser(createUserTemplate());
 
-        UserResponse userResponse = given()
-                .body(user)
-                .when().post(CREATE_USER)
-                .getBody().as(UserResponse.class);
-
-        String userId = userResponse.getId();
-
-        softAssert.assertEquals(userResponse.getFirstName(),user.getFirstName());
-        softAssert.assertEquals(userResponse.getLastName(),user.getLastName());
-        softAssert.assertEquals(userResponse.getPicture(),user.getPicture());
+        softAssert.assertEquals(userResponse.getFirstName(),userTemplate.getFirstName());
+        softAssert.assertEquals(userResponse.getLastName(),userTemplate.getLastName());
+        softAssert.assertEquals(userResponse.getPicture(),userTemplate.getPicture());
         softAssert.assertAll();
     }
 }

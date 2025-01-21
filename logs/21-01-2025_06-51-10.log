@@ -1,0 +1,12 @@
+2025-01-21 18:51:11.238 [main] INFO  listeners.TestListener - STARTING TEST METHOD: createUserTest
+2025-01-21 18:51:14.941 [main] INFO  listeners.TestListener - TEST METHOD: createUserTest PASSED
+2025-01-21 18:51:15.400 [main] INFO  listeners.TestListener - STARTING TEST METHOD: createUserUsingJavaObjectTest
+2025-01-21 18:51:16.885 [main] INFO  listeners.TestListener - TEST METHOD: createUserUsingJavaObjectTest PASSED
+2025-01-21 18:51:16.913 [main] INFO  listeners.TestListener - STARTING TEST METHOD: deleteUsersByIdTest
+2025-01-21 18:51:17.255 [main] INFO  listeners.TestListener - TEST METHOD: deleteUsersByIdTest FAILED
+2025-01-21 18:51:17.307 [main] INFO  listeners.TestListener - STARTING TEST METHOD: getUsersByIdTest
+2025-01-21 18:51:18.678 [main] INFO  listeners.TestListener - TEST METHOD: getUsersByIdTest PASSED
+2025-01-21 18:51:18.764 [main] INFO  listeners.TestListener - STARTING TEST METHOD: getUsersTest
+2025-01-21 18:51:19.289 [main] INFO  listeners.TestListener - TEST METHOD: getUsersTest PASSED
+2025-01-21 18:51:19.376 [main] INFO  listeners.TestListener - STARTING TEST METHOD: getUsersUsingJsonPathTest
+2025-01-21 18:51:19.738 [main] INFO  listeners.TestListener - TEST METHOD: getUsersUsingJsonPathTest PASSED

@@ -1,0 +1,2 @@
+2025-01-21 19:23:42.627 [main] INFO  listeners.TestListener - STARTING TEST METHOD: getUsersTest
+2025-01-21 19:23:45.425 [main] INFO  listeners.TestListener - TEST METHOD: getUsersTest PASSED
